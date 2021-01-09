@@ -175,7 +175,7 @@ class iotflows {
         {
             console.error("Error: can't find/access this data stream.")
         }
-    }
+    }    
     
     /**
      * Publishes an alert to an alert channel.
@@ -387,7 +387,53 @@ class iotflows {
         {
             console.error("Error: can't find/access this action.")
         }           
-    };
+    }
+
+
+    /**
+     * Publishes a generic MQTT message
+     *     
+     * @param {string} topic The topic of the MQTT message
+     * @param {string} payload The payload of the MQTT message
+     */
+    async publishMQTT(topic, payload)
+    {
+        this.client.publish(topic, payload.toString());
+    }
+
+    /**
+     * Subscribes to a generic MQTT topic
+     *      
+     * @param {string} topic MQTT topic
+     * @param {function callback(topic, payload, packet) {}} subscriptionMQTT.callback handler function to be called when data received
+     * @param {number} qos quality of service 0, 1, or 2
+     * * @param {number} qos quality of service 0, 1, or 2
+     */
+    subscribeMQTT(topic, callback, qos, ref) {                            
+        var self = this;
+        ref = ref||0;
+        qos = qos||0;
+        self.subscriptions[topic] = self.subscriptions[topic] || {};
+
+        var sub = {
+            topic:topic,
+            qos:qos,
+            handler:function(mtopic, mpayload, mpacket) {
+                if (self.matchTopic(topic, mtopic)) {
+                    callback(mtopic, mpayload.toString(), mpacket);
+                }
+            },
+            ref: ref
+        };
+        
+        self.subscriptions[topic][ref] = sub;    
+        self.client.on('message', sub.handler);
+
+        var options = {};
+        options.qos = qos;
+        self.client.subscribe(topic, options);
+    }
+
 
 }
 

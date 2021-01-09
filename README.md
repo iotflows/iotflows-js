@@ -2,7 +2,7 @@
 
 https://iotflows.com
 
-IoTFlows Open Source JavaScript SDK.
+IoTFlows Open Source JavaScript WebSocket SDK.
 
 With this tool you can:
 1. Publish secure real-time data streams.
@@ -138,9 +138,38 @@ await iotflows.callAction({
 })   
 ```
 
+---
 
+### Publish a generic MQTT message
+To publish an MQTT message with a defined topic, you need to pass these parameters:
 
+- topic: the mqtt topic
+- payload: the message payload to be sent
 
+Example:
+```javascript
+await iotflows.publishMQTT(
+    'v1/organizations/92c2ddd58730dc9b4e9bb620e7ebcaf5/projects/e9531cc1d542999c0bf081c4147c206a/devices/8d786feef417aeb398f8076fecbe0242/data-streams/7ea022531d23b8d4a6622e3725b5fba2',
+    'Hello!'
+) 
+```
 
+---
 
-    
+### Subscribe to a generic MQTT topic
+To subscribe to a generic MQTT topic, you need to define the following parameters:
+
+- topic: the mqtt topic
+- callback: the callback handler function that gets triggered once a message is received
+
+Example:
+```javascript
+iotflows.subscribeMQTT(
+    'v1/organizations/92c2ddd58730dc9b4e9bb620e7ebcaf5/#',
+    function handler(topic, payload){
+        console.log("New message received!")        
+        console.log(topic)
+        console.log(payload)
+    }
+)
+```

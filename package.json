@@ -1,6 +1,6 @@
 {
   "name": "@iotflows/iotflows-js",
-  "version": "1.0.1",
+  "version": "1.1.2",
   "description": "IoTFlows.js ES Module.",
   "main": "iotflows.js",
   "scripts": {
