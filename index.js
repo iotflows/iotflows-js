@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+// Test Code for iotflows.js
+
 /**
  * Copyright 2021 IoTFlows Inc. All rights reserved.
  * 
@@ -16,20 +17,15 @@
  * 
  **/
 
-"use strict";
-const inquirer = require('inquirer')
-var fs = require('fs');
-const fetch = require('node-fetch');
-const IoTFlows = require("./iotflows")
+const {loadIoTFlows} = require('./iotflows')
 
 async function begin()
 {    
-    // TODO: add user login / token -> MQTT (HTML/JS)
+    // TODO: add user login / token -> MQTT (HTML/JS) //// WEB / Mobile
     // TODO: subscription of wildcard topics of MQTT
 
-    var iotflows = new IoTFlows('dc_0f66191962f3ba6577559d43a2aabe90', '2Vg0Ms4wImoBz1Q]hfYEntF')    
-    await iotflows.init();
-
+    var iotflows = await loadIoTFlows('oc_5b0f31f59b9a375f100df7f6b79bd700', 'VgD8r9wX@o5zNiJP]hfYyECF')
+    
     // await iotflows.alert({
     //     alert_channel_uuid: '1c39f6f25c29c18d3e0598e4da4faada',
     //     severity: 'MINOR',
@@ -61,6 +57,7 @@ async function begin()
             data_stream_uuid: '7ea022531d23b8d4a6622e3725b5fba2',
             data: '100'
         })    
+        
         console.log("Calling an action...")
         await iotflows.callAction({
             action_uuid: 'fd595610b01703c4e99774815cc806c0',
@@ -70,3 +67,6 @@ async function begin()
 }
 
 begin()
+
+
+

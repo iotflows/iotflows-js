@@ -167,6 +167,8 @@ class iotflows {
                 self.client.publish(topic, JSON.stringify(iotflows_payload));
                 // console.log("publishing...")        
                 // console.log(JSON.stringify(iotflows_payload))      
+
+                // TODO: callback to show if the message was sent successfully or not (because of permission, etc.)
             }
         })             
         if(!hasThisDataStream)      
@@ -188,7 +190,7 @@ class iotflows {
     {
         var self = this;
         
-        if(!self.alert_channels) {console.error("Error: no alert channels found. Make sure you have used the right credentials and have initialized IoTFlows."); return;}
+        if(!self.alert_channels) {console.error("Error: no alert channels found. Make sure you have used the right credentials."); return;}
 
         if(alert.severity != 'MAJOR' && alert.severity != 'MINOR' && alert.severity != 'INFORMATIVE') { console.error("Error: can't find this alert severity"); return;}
 
@@ -210,7 +212,7 @@ class iotflows {
 
                 let topic = `v1/organizations/${info.organization_uuid}/alert-channels/${info.alert_channel_uuid}`
                 self.client.publish(topic, JSON.stringify(iotflows_payload));
-        
+                // TODO: callback to show if the message was sent successfully or not (because of permission, etc.)
             }
         })   
         if(!hasThisAlertChannel)      
@@ -288,7 +290,7 @@ class iotflows {
     subscribe(subscription) {                
         var self = this;
         var hasThisDataStream = false;
-        if(!self.data_streams) {console.error("Error: no data streams found. Make sure you have used the right credentials and have initialized IoTFlows."); return;}
+        if(!self.data_streams) {console.error("Error: no data streams found. Make sure you have used the right credentials."); return;}
 
         self.data_streams.map(info => {
             if(info.data_stream_uuid == subscription.data_stream_uuid)
@@ -339,7 +341,7 @@ class iotflows {
     defineAction(defineAction) {                
         var self = this;
         var hasThisAction = false;
-        if(!self.actions) {console.error("Error: no actions found. Make sure you have used the right credentials and have initialized IoTFlows."); return;}
+        if(!self.actions) {console.error("Error: no actions found. Make sure you have used the right credentials."); return;}
 
         self.actions.map(info => {
             if(info.action_uuid == defineAction.action_uuid)
@@ -389,5 +391,8 @@ class iotflows {
 
 }
 
-
-module.exports = iotflows
+module.exports.loadIoTFlows = async function (username, password) {
+    var iotf = new iotflows(username, password);
+    await iotf.init();
+    return iotf;
+}
