@@ -35,7 +35,7 @@ Read more:
 - [How to create a device client](https://docs.iotflows.com/iotflows-platform/creating-a-device-client) 
 - [How to create an organization API key](https://docs.iotflows.com/iotflows-platform/creating-an-organization-api-key)
 
---
+---
 
 ### Publish data stream
 To publish a real-time data stream, you need to pass these parameters in a json object:
@@ -54,7 +54,7 @@ await iotflows.publish({
 })   
 ```
 
---
+---
 
 ### Subscribe to data stream
 To listen to real-time data streams that are published, you need to define the following parameters in a json object:
@@ -74,7 +74,7 @@ await iotflows.subscribe({
 })
 ```
 
---
+---
 
 ### Publish an alert
 To publish an alert, you need to pass these parameters in a json object:
@@ -97,7 +97,7 @@ await iotflows.alert({
 })  
 ```
 
---
+---
 
 ### Define a cloud action
 To define a cloud action that can be called from other IoT/web applications, you need to define the following parameters in a json object:
@@ -120,7 +120,7 @@ await iotflows.defineAction({
 })
 ```
 
---
+---
 
 ### Call/Execute a cloud action
 To publish an alert, you need to pass these parameters in a json object:
