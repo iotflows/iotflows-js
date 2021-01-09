@@ -2,7 +2,7 @@
 
 https://iotflows.com
 
-IoTFlows JavaScript SDK.
+IoTFlows Open Source JavaScript SDK.
 
 With this tool you can:
 1. Publish secure real-time data streams.
@@ -31,6 +31,9 @@ For this, you would can use either
 1. A Device Client that has permission to interact with the resources available in its project, or
 2. An Organization API KEY that can have read-only or read/write permissions to the entire organization resources
 
+Read more:
+- [How to create a device client](https://docs.iotflows.com/iotflows-platform/creating-a-device-client) 
+- [How to create an organization API key](https://docs.iotflows.com/iotflows-platform/creating-an-organization-api-key)
 
 
 ### Publish data stream
@@ -38,6 +41,9 @@ To publish a real-time data stream, you need to pass these parameters in a json 
 
 - data_stream_uuid: the uuid of the data stream
 - data: the data to be published to the data stream
+
+Read more:
+- [How to create a data stream](https://docs.iotflows.com/iotflows-platform/creating-a-data-stream)
 
 Example:
 ```javascript
@@ -74,6 +80,9 @@ To publish an alert, you need to pass these parameters in a json object:
 - subject: the subject of the alert
 - description: the description/message of the alert
 
+Read more:
+- [How to create an alert channel](https://docs.iotflows.com/iotflows-platform/alert-channel#creating-an-alert-channel)
+
 Example:
 ```javascript
 await iotflows.alert({
@@ -84,12 +93,16 @@ await iotflows.alert({
 })  
 ```
 
+
 ### Define a cloud action
 To define a cloud action that can be called from other IoT/web applications, you need to define the following parameters in a json object:
 
 - action_uuid action uuid
 - qos (optional): quality of service 0, 1, or 2 (0: At most once, 1: At least once, 2: Exactly once)
 - callback: handler function to be called when action gets executed
+
+Read more:
+- [How to create an action](https://docs.iotflows.com/iotflows-platform/creating-an-action)
 
 Example:
 ```javascript
