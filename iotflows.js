@@ -143,6 +143,7 @@ class iotflows {
      * @param {Object} dataStream 
      * @param {string} dataStream.data_stream_uuid The uuid of the data stream
      * @param {string} dataStream.data The data to be published to the data stream
+     * @param {string} dataStream.subtopic The subtopic to append to the topic
      */
     async publish(dataStream)
     {
@@ -163,6 +164,8 @@ class iotflows {
                     "data_stream_id": dataStream.data_stream_uuid
                 }
                 let topic = `v1/organizations/${info.organization_uuid}/projects/${info.project_uuid}/devices/${info.device_uuid}/data-streams/${dataStream.data_stream_uuid}`
+                // append the subtopic if exists
+                if (dataStream.subtopic) topic += dataStream.subtopic
 
                 self.client.publish(topic, JSON.stringify(iotflows_payload));
                 // console.log("publishing...")        
@@ -284,6 +287,7 @@ class iotflows {
      * @param {Object} subscription  
      * @param {string} subscription.data_stream_uuid data stream uuid
      * @param {number} subscription.qos quality of service 0, 1, or 2
+     * @param {boolean} subscription.subtopic_subscription flag to subscribe to subtopics (/#)
      * @param {function callback(topic, payload, packet) {}} subscription.callback handler function to be called when data received
      * 
      */
@@ -298,6 +302,9 @@ class iotflows {
                 hasThisDataStream = true;
                 let topic = `v1/organizations/${info.organization_uuid}/projects/${info.project_uuid}/devices/${info.device_uuid}/data-streams/${subscription.data_stream_uuid}`
                 
+                // append /# if subtopic flag is true
+                if(subscription.subtopic_subscription) topic += '/#'
+
                 subscription.ref = subscription.ref||0;
                 subscription.qos = subscription.qos||0;
                 self.subscriptions[topic] = self.subscriptions[topic] || {};
@@ -395,10 +402,11 @@ class iotflows {
      *     
      * @param {string} topic The topic of the MQTT message
      * @param {string} payload The payload of the MQTT message
+     * @param {string} subtopic The subtopic to append to the topic
      */
     async publishMQTT(topic, payload)
     {
-        this.client.publish(topic, payload.toString());
+        this.client.publish(topic + subtopic, payload.toString());
     }
 
     /**
@@ -406,8 +414,7 @@ class iotflows {
      *      
      * @param {string} topic MQTT topic
      * @param {function callback(topic, payload, packet) {}} subscriptionMQTT.callback handler function to be called when data received
-     * @param {number} qos quality of service 0, 1, or 2
-     * * @param {number} qos quality of service 0, 1, or 2
+     * @param {number} qos quality of service 0, 1, or 2     
      */
     subscribeMQTT(topic, callback, qos, ref) {                            
         var self = this;
