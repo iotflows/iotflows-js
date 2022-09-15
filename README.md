@@ -198,8 +198,6 @@ To unsubscribe from a generic MQTT topic, you only need to provide the topic:
 
 Example:
 ```javascript
-await iotflows.unsubscribeMQTT({
-    topic: 'v1/organizations/92c2ddd58730dc9b4e9bb620e7ebcaf5/#'
-})
+await iotflows.unsubscribeMQTT('v1/organizations/92c2ddd58730dc9b4e9bb620e7ebcaf5/#')
 ```
 
