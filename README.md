@@ -58,16 +58,36 @@ To listen to real-time data streams that are published, you need to define the f
 
 - data_stream_uuid: data stream uuid
 - qos (optional): quality of service 0, 1, or 2 (0: At most once, 1: At least once, 2: Exactly once)
+- subtopic_subscription (optional): boolean flag to subscribe to subtopics
 - callback: handler function to be called when data received
 
 Example:
 ```javascript
 await iotflows.subscribe({
     data_stream_uuid: 'ds_xxxxxxxxxxxxxxxxxxxxxxx',        
+    subtopic_subscription: true,
     callback: function handler(topic, payload){
         console.log("New message received!")        
         console.log(payload)        
     }
+})
+```
+
+---
+
+### Unsubscribe from a data stream
+To unsubscribe from real-time data streams, you need to define the following parameters in a json object:
+
+- data_stream_uuid: data stream uuid
+- qos (optional): quality of service 0, 1, or 2 (0: At most once, 1: At least once, 2: Exactly once)
+- subtopic_subscription (optional): boolean flag to unsubscribe from subtopics
+- callback: handler function to be called when data received
+
+Example:
+```javascript
+await iotflows.unsubscribe({
+    data_stream_uuid: 'ds_xxxxxxxxxxxxxxxxxxxxxxx',        
+    subtopic_subscription: true
 })
 ```
 
@@ -168,3 +188,18 @@ iotflows.subscribeMQTT(
     }
 )
 ```
+
+---
+
+### Unsubscribe from a generic MQTT topic
+To unsubscribe from a generic MQTT topic, you only need to provide the topic:
+
+- topic: the mqtt topic
+
+Example:
+```javascript
+await iotflows.unsubscribeMQTT({
+    topic: 'v1/organizations/92c2ddd58730dc9b4e9bb620e7ebcaf5/#'
+})
+```
+

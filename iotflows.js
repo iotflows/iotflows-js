@@ -440,7 +440,79 @@ class iotflows {
         options.qos = qos;
         self.client.subscribe(topic, options);
     }
+    
+    /**
+     * Unsubscribes from a generic MQTT topic
+     *      
+     * @param {string} topic MQTT topic
+     */
+    unsubscribeMQTT(topic, ref, removed) {
+        var self = this;
+        ref = ref||0;
+        var sub = self.subscriptions[topic];
+        if (sub) {
+            if (sub[ref]) {
+                self.client.removeListener('message',sub[ref].handler);
+                delete sub[ref];
+            }
+            if (removed) {
+                if (Object.keys(sub).length === 0) {
+                    delete self.subscriptions[topic];
+                    if (self.connected) {
+                        self.client.unsubscribe(topic);
+                    }
+                }
+            }
+        }
+    };
 
+    /**
+     * Unsubscribes from a data stream.
+     * 
+     * @param {Object} subscription  
+     * @param {string} subscription.data_stream_uuid data stream uuid
+     * @param {boolean} subscription.subtopic_subscription flag to subscribe to subtopics (/#)
+     * 
+     */
+     unsubscribe(subscription, ref, removed) {          
+        
+        var self = this;        
+        var hasThisDataStream = false;
+        if(!self.data_streams) {console.error("Error: no data streams found. Make sure you have used the right credentials."); return;}
+        self.data_streams.map(info => {
+            if(info.data_stream_uuid == subscription.data_stream_uuid)
+            {
+                hasThisDataStream = true;
+                let topic = `v1/organizations/${info.organization_uuid}/projects/${info.project_uuid}/devices/${info.device_uuid}/data-streams/${subscription.data_stream_uuid}`
+                
+                // append /# if subtopic flag is true
+                if(subscription.subtopic_subscription) topic += '/#'
+
+                ref = ref||0;
+                var sub = self.subscriptions[topic];        
+                if (sub) {
+                    if (sub[ref]) {
+                        self.client.removeListener('message',sub[ref].handler);
+                        delete sub[ref];
+                    }
+                    if (removed) {
+                        if (Object.keys(sub).length === 0) {
+                            delete self.subscriptions[topic];
+                            if (self.connected) {
+                                self.client.unsubscribe(topic);
+                            }
+                        }
+                    }
+                }
+
+            }
+        })                                
+
+        if(!hasThisDataStream)      
+        {
+            console.error("Error: can't find/access this data stream.")
+        }           
+    };
 
 }
 
